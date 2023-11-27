@@ -23,7 +23,7 @@ const soporteCorreoPost = async (req, res = response) => {
     const { correo } = req.params;
 
     // Construye el enlace de activación (cambia por tu lógica real)
-    const activationLink = `http://localhost:8080/api/soporte/contrasenia/${correo}`;
+    const activationLink = `https://prototipo2023-d6240700184c.herokuapp.com/api/soporte/contrasenia/${correo}`;
 
     const mailOptions = {
       from: '"Soporte" <charlyxbox360nuevo@gmail.com>',
