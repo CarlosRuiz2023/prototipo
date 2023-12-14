@@ -38,6 +38,19 @@ const candidatosPost = async (req, res = response) => {
       longitud,
     } = req.body;
 
+    const candidato = await Candidato.findOne({
+      where: {
+        nombre,
+      },
+      requires: true,
+    });
+
+    if (candidato) {
+      return res.status(400).json({
+        msg: `El candidato ${candidato.nombre}, ya existe`,
+      });
+    }
+
     // llamar procedimiento
     await Candidato.sequelize.query(
       `CALL insertar_candidato(:nombre, :edad, :estado, :municipio, :colonia, :calle, :entre_calles, :no_int, :no_ext, :institucion, :grado_escolaridad, :fotografia, :id_tipo_apoyo, :id_estatus, :latitud, :longitud)`,
@@ -104,12 +117,21 @@ const candidatosPut = async (req, res = response) => {
       pregunta9 = "",
     } = req.body;
 
-    const candidato = await Candidato.findOne({ nombre });
+    const candidatoActual = await Candidato.findByPk(id);
 
-    if (candidato) {
-      return res.status(400).json({
-        msg: `El candidato ${candidato.nombre}, ya existe`,
+    if (!candidatoActual.nombre === nombre) {
+      const candidato = await Candidato.findOne({
+        where: {
+          nombre,
+        },
+        requires: true,
       });
+
+      if (candidato) {
+        return res.status(400).json({
+          msg: `El candidato ${candidato.nombre}, ya existe`,
+        });
+      }
     }
 
     const pregunta10 = JSON.stringify({
@@ -224,7 +246,7 @@ const visitasGet = async (req, res = response) => {
     const { id_visita } = req.params;
     // llamar procedimiento
     const [result] = await sequelize.query(
-      `SELECT * FROM visitas AS v INNER JOIN candidatos AS c ON v.id_candidato=c.id_candidato INNER JOIN usuarios AS u ON u.id_usuario=v.id_usuario WHERE id_visita=${id_visita};`
+      `SELECT v.id_visita,v.id_candidato,v.id_usuario,v.razon,v.id_estatus_encuesta,v.fotografia AS fotografia_visita,v.latitud,v.longitud,v.created_at AS date_visita,c.nombre,c.edad,c.estado,c.municipio,c.colonia,c.calle,c.entre_calles,c.no_int,c.no_ext,c.institucion,c.grado_escolaridad,c.fotografia AS fotografia_candidato,c.id_tipo_apoyo,c.id_estatus,c.pregunta1,c.pregunta2,c.pregunta3,c.pregunta4,c.pregunta5,c.pregunta6,c.pregunta7,c.pregunta8,c.pregunta9,c.pregunta10,c.created_at AS date_candidato,u.nombre AS nombre_usuario, u.correo, u.password,u.id_rol FROM visitas AS v INNER JOIN candidatos AS c ON v.id_candidato=c.id_candidato INNER JOIN usuarios AS u ON u.id_usuario=v.id_usuario WHERE id_visita=${id_visita};`
     );
     res.json({
       result,

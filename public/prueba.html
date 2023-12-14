@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Enviar Servicio</title>
+  </head>
+  <body>
+    <h1>Enviar Datos</h1>
+
+    <form>
+      Nombre: <input type="text" id="nombre" /><br /><br />
+      Edad: <input type="number" id="edad" /><br /><br />
+      Estado: <input type="text" id="estado" /><br /><br />
+      Municipio: <input type="text" id="municipio" /><br /><br />
+      Colonia: <input type="text" id="colonia" /><br /><br />
+      Calle: <input type="text" id="calle" /><br /><br />
+      Entre calles: <input type="text" id="entre_calles" /><br /><br />
+      No. interior: <input type="text" id="no_int" /><br /><br />
+      No. exterior: <input type="text" id="no_ext" /><br /><br />
+      Institución: <input type="text" id="institucion" /><br /><br />
+      Grado escolaridad:
+      <input type="text" id="grado_escolaridad" /><br /><br />
+
+      Fotografía: <input type="file" id="fotografia" /><br /><br />
+
+      <button type="button" onclick="enviarDatos()">Enviar</button>
+    </form>
+
+    <script>
+      async function enviarDatos() {
+        // Obtener valores de inputs
+        var nombre = document.getElementById("nombre").value;
+        var edad = document.getElementById("edad").value;
+        var estado = document.getElementById("estado").value;
+        var municipio = document.getElementById("municipio").value;
+        var colonia = document.getElementById("colonia").value;
+        var calle = document.getElementById("calle").value;
+        var entre_calles = document.getElementById("entre_calles").value;
+        var no_int = document.getElementById("no_int").value;
+        var no_ext = document.getElementById("no_ext").value;
+        var institucion = document.getElementById("institucion").value;
+        var grado_escolaridad =
+          document.getElementById("grado_escolaridad").value;
+        var fotografia = document.getElementById("fotografia").files[0];
+        // Convertir la imagen a base64
+        var reader = new FileReader();
+        reader.onloadend = function () {
+          var base64data = reader.result;
+          // Agregar la imagen como base64 al objeto de datos
+          data.fotografia = base64data;
+        };
+        // Construir objeto
+        var data = {
+          nombre: nombre,
+          edad: edad,
+          estado: estado,
+          municipio: municipio,
+          colonia: colonia,
+          calle: calle,
+          entre_calles: entre_calles,
+          no_int: no_int,
+          no_ext: no_ext,
+          institucion: institucion,
+          grado_escolaridad: grado_escolaridad,
+          fotografia: fotografia,
+          id_tipo_apoyo: 1,
+          id_estatus: 1,
+          latitud: 19.2,
+          longitud: -19.2,
+        };
+        var formData = new FormData();
+
+        formData.append("nombre", nombre);
+        formData.append("edad", edad);
+        formData.append("estado", estado);
+        formData.append("municipio", municipio);
+        formData.append("colonia", colonia);
+        formData.append("calle", calle);
+        formData.append("entre_calles", entre_calles);
+        formData.append("no_int", no_int);
+        formData.append("no_ext", no_ext);
+        formData.append("institucion", institucion);
+        formData.append("grado_escolaridad", grado_escolaridad);
+        formData.append("id_tipo_apoyo", 1);
+        formData.append("id_estatus", 1);
+        formData.append("latitud", 19.2);
+        formData.append("longitud", -19.2);
+        formData.append("fotografia", fotografia);
+
+        try {
+          const url = "http://localhost:8080/api/candidatos";
+
+          const response = await axios({
+            method: "post",
+            url,
+            data: data,
+          });
+
+          console.log(response.data);
+        } catch (error) {
+          console.error(error);
+        }
+      }
+    </script>
+  </body>
+</html>
