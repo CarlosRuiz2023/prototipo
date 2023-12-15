@@ -76,8 +76,18 @@ const candidatosPost = async (req, res = response) => {
       }
     );
 
+    const candidatoInsertado = await Candidato.findOne({
+      where: {
+        nombre,
+      },
+      order: [["created_at", "DESC"]],
+    });
+
+    const candidatoId = candidatoInsertado.id_candidato;
+
     res.json({
       msg: "Candidato registrado",
+      id_candidato: candidatoId,
     });
   } catch (error) {
     console.error(error);
@@ -232,8 +242,17 @@ const visitasPost = async (req, res = response) => {
         },
       }
     );
+    const visitaInsertada = await Visita.findOne({
+      where: {
+        id_candidato,
+      },
+      order: [["created_at", "DESC"]],
+    });
+
+    const visitaId = visitaInsertada.id_visita;
     res.json({
       msg: "Visita registrada",
+      id_visita: visitaId,
     });
   } catch (error) {
     console.error(error);
