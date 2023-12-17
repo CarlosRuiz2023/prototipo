@@ -10,6 +10,7 @@ const {
   visitasPost,
   candidatosApoyoPut,
   visitasGet,
+  visitasAllGet,
 } = require("../controllers/candidatos");
 const {
   existeCandidatoPorId,
@@ -30,6 +31,8 @@ router.get(
   ],
   visitasGet
 );
+
+router.get("/visitas", visitasAllGet);
 
 router.post(
   "/",

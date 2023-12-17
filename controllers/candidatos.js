@@ -260,6 +260,18 @@ const visitasPost = async (req, res = response) => {
   }
 };
 
+const visitasAllGet = async (req, res = response) => {
+  try {
+    const [visitas] = await sequelize.query(`SELECT * FROM visitas;`);
+    res.json({
+      visitas,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ msg: "Error al insertar candidato" });
+  }
+};
+
 const visitasGet = async (req, res = response) => {
   try {
     const { id_visita } = req.params;
@@ -283,4 +295,5 @@ module.exports = {
   visitasPost,
   candidatosApoyoPut,
   visitasGet,
+  visitasAllGet,
 };
