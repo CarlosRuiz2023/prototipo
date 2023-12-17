@@ -262,7 +262,9 @@ const visitasPost = async (req, res = response) => {
 
 const visitasAllGet = async (req, res = response) => {
   try {
-    const [visitas] = await sequelize.query(`SELECT * FROM visitas;`);
+    const [visitas] = await sequelize.query(
+      `SELECT v.id_visita,c.nombre AS nombre,t.estatus AS estatus_apoyo,v.id_estatus_encuesta AS visitado,v.id_estatus_encuesta AS estatus_encuesta,u.nombre AS nombre_usuario,v.created_at AS fecha_visita,e.nombre AS catalogos FROM visitas AS v INNER JOIN candidatos AS c ON v.id_candidato=c.id_candidato INNER JOIN usuarios AS u ON u.id_usuario=v.id_usuario INNER JOIN estatus_apoyo AS e ON e.id_estatus=c.id_estatus INNER JOIN tipos_apoyo AS t ON c.id_tipo_apoyo=t.id_tipo_apoyo;`
+    );
     res.json({
       visitas,
     });
