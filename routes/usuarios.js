@@ -56,12 +56,10 @@ router.put(
   usuariosPut
 );
 
-router.put(
-  "/cambiarPass/:id",
+router.get(
+  "/cambiarPass/:correo",
   [
-    check("id", "El id es obligatorio").not().isEmpty(),
-    check("id", "EL id debe ser un numero").isNumeric(),
-    check("id").custom(existeUsuarioPorId),
+    check("correo", "El id es obligatorio").not().isEmpty(),
     check("password", "La contrasenia es obligatoria").not().isEmpty(),
     validarCampos,
   ],

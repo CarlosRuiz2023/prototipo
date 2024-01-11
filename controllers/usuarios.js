@@ -109,9 +109,14 @@ const usuariosDelete = async (req, res = response) => {
 
 const cambiarPassPut = async (req, res = response) => {
   try {
-    const { id } = req.params;
+    const { correo } = req.params;
+    console.log(req.query);
     // obtener datos del body
-    let { password } = req.body;
+    let { password, passwordConfirm } = req.query;
+
+    if (password !== passwordConfirm) {
+      return res.status(400).json({ msg: "Error passwords diferentes" });
+    }
 
     //Encriptar la contraseña
     const salt = bcryptjs.genSaltSync();
@@ -119,7 +124,7 @@ const cambiarPassPut = async (req, res = response) => {
 
     // Llamar al procedimiento
     await sequelize.query(
-      `UPDATE usuarios SET password = '${password}' WHERE id_usuario=${id}`
+      `UPDATE usuarios SET password = '${password}' WHERE correo='${correo}'`
     );
 
     res.json({

@@ -1,7 +1,7 @@
 const { Router } = require("express");
 const { check } = require("express-validator");
 const {
-  soporteCorreoPost,
+  soporteCorreoPost1,
   soportePasswordPost,
 } = require("../controllers/soporte");
 const { validarCampos } = require("../middlewares/validar-campos");
@@ -16,7 +16,7 @@ router.post(
     check("correo").custom(emailExistente),
     validarCampos,
   ],
-  soporteCorreoPost
+  soporteCorreoPost1
 );
 
 router.get(
